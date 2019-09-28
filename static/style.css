@@ -1,0 +1,184 @@
+* {
+    font-family: "Helvetica Neue Bold" , Roboto, Arial, Helvetica, sans-serif;
+    font-weight: 1000;
+}
+h1 {
+    font-family: "Helvetica Neue Light" , Roboto, Helvetica, Arial, sans-serif;
+    font-size: 40px;
+    color: #232323;
+    line-height: 50px;
+    font-weight: 200;
+}
+
+h2 {
+    font-size: 22px;
+    color: brown;
+    line-height: 23px;
+}
+
+h3 {
+    font-size: 16px;
+    color: chartreuse;
+    line-height: 20px;
+}
+
+p {
+    font-family: "Helvetica Neue", Roboto, Helvetica, Arial, sans-serif;
+ 	font-size: 18px;
+ 	color: #7b7512;
+ 	line-height: 20px;
+ 	font-weight: 300;
+}
+
+strong {
+    font-size: 14px;
+ 	color: #7B7843;
+ 	line-height: 20px;
+}
+
+a {
+    font-size: 12px;
+ 	color: #009123;
+ 	line-height: 15px;
+}
+
+.padding-top {
+    padding-top: 20px;
+}
+
+.padding-bottom {
+    padding-bottom: 20px;
+}
+
+.margin-right {
+    margin-right: 20px;
+}
+
+.padding-none {
+    padding: 0;
+}
+
+.btn {
+    padding: 10px;
+	margin: 0;
+	border-color: #9FB81A;
+	border-width: 3px;
+	color: #9FB81A;
+}
+
+.btn:hover {
+    border-color: #9FB80B;
+}
+
+.btn.delete {
+    border-color: #aaaaaa;
+	color: #aaaaaa;
+}
+
+.btn.delete:hover {
+    border-color: #aaaaaa;
+	color: greenyellow;
+}
+
+.glyphicon {
+    margin-right: 15px;
+}
+
+.top-menu {
+    padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+.top-menu p {
+    margin-bottom: 0;
+	line-height: 14px;
+}
+
+.top-menu a {
+    margin-bottom: 0;
+	line-height: 15px;
+	font-size: 15px;
+	color: #7B7223;
+	font-weight: 300;
+}
+
+.divider {
+    height: 15px;
+}
+
+.divider.blue {
+    background-color:#42C;
+}
+
+.divider.green {
+    background-color: #9FB80B;
+}
+
+.banner.main {
+    height: 150px;
+	background: url("/static/top-banner.jpg");
+	background-position: right;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.banner.menu {
+    height: 110px;
+	background-color: #E1E17F;
+}
+
+.banner.profile {
+    height: 150px;
+	background-color: #A6E8EB;
+}
+
+.banner h1 {
+    margin: 45px 0;
+}
+
+ .restaurant-list {
+    background-color: #F0F0F0;
+ 	padding: 30px;
+ }
+
+ .restaurant-list:hover {
+    background-color: #e1e17f;
+ 	padding: 20px;
+ }
+
+.menu-item {
+    background: #F0F0F0;
+	padding: 20px;
+	margin: 20px;
+	margin-left: -20px;
+}
+
+.creator {
+    padding-right: 20px;
+	margin-top: -20px;
+	text-align: right;
+	float:right;
+}
+
+.creator img {
+    width: 100px;
+	border-radius: 50%;
+}
+
+.creator figcaption {
+    font-size: 14px;
+	color: #7B7573;
+	font-weight: 400;
+	margin-top: -20px;
+}
+
+.flash {
+    background-color: #98FB98;
+	width:100%;
+	text-decoration: none;
+}
+
+.flash li {
+	list-style-type: none;
+	text-align: center;
+}
