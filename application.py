@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, jsonify, url_for, f
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import desc
-from database_setup import Catagory, Base, CatagoryItem, User
+from database_setup import Element, Base, ElementItem, User
 from flask import session as login_session
 import random
 from oauth2client.client import flow_from_clientsecrets
@@ -17,10 +17,10 @@ app = Flask(__name__)
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
-APPLICATION_NAME = "Catagory Series Application"
+APPLICATION_NAME = "Element Series Application"
 
 # Connect to Database and create database session
-engine = create_engine('sqlite:///catagories.db',connect_args={'check_same_thread':False})
+engine = create_engine('sqlite:///elements.db',connect_args={'check_same_thread':False})
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -260,133 +260,133 @@ def gdisconnect():
 
 
 # JSON APIs to view catagory Information
-@app.route('/catagory/<int:catagory_id>/menu/JSON')
-def catagoryMenuJSON(catagory_id):
-    catagory = session.query(Catagory).filter_by(id=catagory_id).one()
-    items = session.query(CatagoryItem).filter_by(
-        catagory_id=catagory_id).all()
+@app.route('/element/<int:element_id>/menu/JSON')
+def elementMenuJSON(element_id):
+    catagory = session.query(Element).filter_by(id=element_id).one()
+    items = session.query(ElementItem).filter_by(
+        element_id=element_id).all()
     return jsonify(MenuItems=[i.serialize for i in items])
 
 
-@app.route('/catagory/<int:catagory_id>/menu/<int:series_id>/JSON')
-def seriesItemJSON(catagory_id, series_id):
-    Catagory_Item = session.query(CatagoryItem).filter_by(id=series_id).one()
-    return jsonify(Catagory_Item=Catagory_Item.serialize)
+@app.route('/element/<int:element_id>/menu/<int:series_id>/JSON')
+def seriesItemJSON(element_id, series_id):
+    Element_Item = session.query(ElementItem).filter_by(id=series_id).one()
+    return jsonify(Element_Item=Element_Item.serialize)
 
 
-@app.route('/catagory/JSON')
-def catagoriesJSON():
-    catagories = session.query(Catagory).all()
-    return jsonify(catagories=[r.serialize for r in catagories])
+@app.route('/element/JSON')
+def elementsJSON():
+    elements = session.query(Element).all()
+    return jsonify(elements=[r.serialize for r in elements])
 
 
-# Show all restaurants
+# Show all elements
 @app.route('/')
-@app.route('/catagory/')
-def showCatagories():
-    items = session.query(CatagoryItem).order_by(CatagoryItem.name.desc())
-    catagories = session.query(Catagory).order_by(asc(Catagory.name))
-    return render_template('catagories.html', catagories=catagories,items=items)
+@app.route('/element/')
+def showElements():
+    items = session.query(ElementItem).order_by(ElementItem.name.desc())
+    elements = session.query(Element).order_by(asc(Element.name))
+    return render_template('elements.html', elements=elements,items=items)
 
-# Create a new restaurant
+# Create a new element
 
 
-@app.route('/catagory/new/', methods=['GET', 'POST'])
-def newCatagory():
+@app.route('/element/new/', methods=['GET', 'POST'])
+def newElement():
     if 'username' not in login_session:
         return redirect('/login')
     if request.method == 'POST':
-        newCatagory = Catagory(name=request.form['name'], user_id=login_session['user_id'])
-        session.add(newCatagory)
-        flash('New Catagory %s Successfully Created' % newCatagory.name)
+        newElement = Element(name=request.form['name'], user_id=login_session['user_id'])
+        session.add(newElement)
+        flash('New Element %s Successfully Created' % newElement.name)
         session.commit()
-        return redirect(url_for('showCatagories'))
+        return redirect(url_for('showElements'))
     else:
-        return render_template('newCatagory.html')
+        return render_template('newElement.html')
 
-# Edit a catagory
+# Edit an Element
 
 
-@app.route('/catagory/<int:catagory_id>/edit/', methods=['GET', 'POST'])
-def editCatagory(catagory_id):
-    editedCatagory = session.query(Catagory).filter_by(id=catagory_id).one()
+@app.route('/element/<int:element_id>/edit/', methods=['GET', 'POST'])
+def editElement(element_id):
+    editedElement = session.query(Element).filter_by(id=element_id).one()
     if 'username' not in login_session:
         return redirect('/login')
-    if editedCatagory.user_id != login_session['user_id']:
-        return "<script>function myFunction() {alert('You are not authorized to edit this catagory. Please create your own  in order to edit.');}</script><body onload='myFunction()'>"
+    if editedElement.user_id != login_session['user_id']:
+        return "<script>function myFunction() {alert('You are not authorized to edit this element. Please create your own  in order to edit.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
         if request.form['name']:
-            editedCatagory.name = request.form['name']
-            flash('Catagory Successfully Edited %s' % editedCatagory.name)
-            return redirect(url_for('showCatagories'))
+            editedElement.name = request.form['name']
+            flash('Element Successfully Edited %s' % editedElement.name)
+            return redirect(url_for('showElements'))
     else:
-        return render_template('editCatagory.html', catagory=editedCatagory)
+        return render_template('editElement.html', catagory=editedElement)
 
 
-# Delete a catagory
-@app.route('/catagory/<int:catagory_id>/delete/', methods=['GET', 'POST'])
-def deleteCatagory(catagory_id):
-    catagoryToDelete = session.query(Catagory).filter_by(id=catagory_id).one()
+# Delete an element
+@app.route('/element/<int:element_id>/delete/', methods=['GET', 'POST'])
+def deleteElement(element_id):
+    elementToDelete = session.query(Element).filter_by(id=element_id).one()
     if 'username' not in login_session:
         return redirect('/login')
-    if catagoryToDelete.user_id != login_session['user_id']:
-        return "<script>function myFunction() {alert('You are not authorized to delete this catagory. Please create your own catagory in order to delete.');}</script><body onload='myFunction()'>"
+    if elementToDelete.user_id != login_session['user_id']:
+        return "<script>function myFunction() {alert('You are not authorized to delete this element. Please create your own element in order to delete.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
-        session.delete(catagoryToDelete)
-        flash('%s Successfully Deleted' % catagoryToDelete.name)
+        session.delete(elementToDelete)
+        flash('%s Successfully Deleted' % elementToDelete.name)
         session.commit()
-        return redirect(url_for('showCatagories', catagory_id=catagory_id))
+        return redirect(url_for('showElements', element_id=element_id))
     else:
-        return render_template('deleteCatagory.html', catagory=catagoryToDelete)
+        return render_template('deleteElement.html', catagory=elementToDelete)
 
-# Show a restaurant menu
+# Show a element menu
 
-@app.route('/catagory/<int:catagory_id>/')
-@app.route('/catagory/<int:catagory_id>/items/')
-def showMenu(catagory_id):
-    catagory = session.query(Catagory).filter_by(id=catagory_id).one()
-    catagories = session.query(Catagory).order_by(asc(Catagory.name))
-    items = session.query(CatagoryItem).filter_by(
-        catagory_id=catagory_id).all()
-    return render_template('menu.html', items=items, catagory=catagory,catagories=catagories)
+@app.route('/element/<int:element_id>/')
+@app.route('/element/<int:element_id>/items/')
+def showMenu(element_id):
+    element = session.query(Element).filter_by(id=element_id).one()
+    elements = session.query(Element).order_by(asc(Element.name))
+    items = session.query(ElementItem).filter_by(
+        element_id=element_id).all()
+    return render_template('menu.html', items=items, element=element,elements=elements)
 
 # Show a items dis
 
-@app.route('/catagory/<int:catagory_id>/items/<int:series_id>/description/')
-def showDIS(catagory_id,series_id):
-    item = session.query(CatagoryItem).filter_by(id=series_id).one()
-    #items = session.query(CatagoryItem).filter_by(catagory_id=catagory_id).all()
+@app.route('/element/<int:element_id>/items/<int:series_id>/description/')
+def showDIS(element_id,series_id):
+    item = session.query(ElementItem).filter_by(id=series_id).one()
+    #items = session.query(ElementItem).filter_by(element_id=element_id).all()
     return render_template('menu.html', item=item)
 
 # Create a new menu item
-@app.route('/catagory/<int:catagory_id>/items/new/', methods=['GET', 'POST'])
-def newSeriesItem(catagory_id):
+@app.route('/element/<int:element_id>/items/new/', methods=['GET', 'POST'])
+def newSeriesItem(element_id):
     if 'username' not in login_session:
         return redirect('/login')
-    catagory = session.query(Catagory).filter_by(id=catagory_id).one()
-    if login_session['user_id'] != catagory.user_id:
-        return "<script>function myFunction() {alert('You are not authorized to add menu items to this catagory. Please create your own series in order to add items.');}</script><body onload='myFunction()'>"
+    catagory = session.query(Element).filter_by(id=element_id).one()
+    if login_session['user_id'] != element.user_id:
+        return "<script>function myFunction() {alert('You are not authorized to add menu items to this element. Please create your own series in order to add items.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
-        newItem = CatagoryItem(name=request.form['name'], description=request.form[
-                           'description'], catagory_id=catagory_id)
+        newItem = ElementItem(name=request.form['name'], description=request.form[
+                           'description'], element_id=element_id)
         session.add(newItem)
         session.commit()
         flash('New Series %s Item Successfully Created' % (newItem.name))
-        return redirect(url_for('showMenu', catagory_id=catagory_id))
+        return redirect(url_for('showMenu', element_id=element_id))
     else:
-        return render_template('newseriesitem.html', catagory_id=catagory_id,catagory=catagory)
+        return render_template('newseriesitem.html', element_id=element_id,element=element)
 
 # Edit a menu item
 
 
-@app.route('/catagory/<int:catagory_id>/items/<int:series_id>/edit', methods=['GET', 'POST'])
-def editSeriesItem(catagory_id, series_id):
+@app.route('/element/<int:element_id>/items/<int:series_id>/edit', methods=['GET', 'POST'])
+def editSeriesItem(element_id, series_id):
     if 'username' not in login_session:
         return redirect('/login')
-    editedItem = session.query(CatagoryItem).filter_by(id=series_id).one()
-    catagory = session.query(Catagory).filter_by(id=catagory_id).one()
-    if login_session['user_id'] != catagory.user_id:
-        return "<script>function myFunction() {alert('You are not authorized to edit menu items to this catagory. Please create your own series in order to edit items.');}</script><body onload='myFunction()'>"
+    editedItem = session.query(ElementItem).filter_by(id=series_id).one()
+    element = session.query(Element).filter_by(id=element_id).one()
+    if login_session['user_id'] != element.user_id:
+        return "<script>function myFunction() {alert('You are not authorized to edit menu items to this element. Please create your own series in order to edit items.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
         if request.form['name']:
             editedItem.name = request.form['name']
@@ -395,25 +395,25 @@ def editSeriesItem(catagory_id, series_id):
         session.add(editedItem)
         session.commit()
         flash('Menu Series Successfully Edited')
-        return redirect(url_for('showMenu', catagory_id=catagory_id))
+        return redirect(url_for('showMenu', element_id=element_id))
     else:
-        return render_template('editSeriesitem.html', catagory_id=catagory_id, series_id=series_id, item=editedItem)
+        return render_template('editSeriesitem.html', element_id=element_id, series_id=series_id, item=editedItem)
 
 
 # Delete a menu item
-@app.route('/catagory/<int:catagory_id>/items/<int:series_id>/delete', methods=['GET', 'POST'])
-def deleteSeriesItem(catagory_id, series_id):
+@app.route('/element/<int:element_id>/items/<int:series_id>/delete', methods=['GET', 'POST'])
+def deleteSeriesItem(element_id, series_id):
     if 'username' not in login_session:
         return redirect('/login')
-    catagory = session.query(Catagory).filter_by(id=catagory_id).one()
-    itemToDelete = session.query(CatagoryItem).filter_by(id=series_id).one()
+    element = session.query(Element).filter_by(id=element_id).one()
+    itemToDelete = session.query(ElementItem).filter_by(id=series_id).one()
     if login_session['user_id'] != restaurant.user_id:
-        return "<script>function myFunction() {alert('You are not authorized to delete menu items to this catagory. Please create your own catagory in order to delete items.');}</script><body onload='myFunction()'>"
+        return "<script>function myFunction() {alert('You are not authorized to delete menu items to this element. Please create your own element in order to delete items.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
         session.delete(itemToDelete)
         session.commit()
         flash('Series Item Successfully Deleted')
-        return redirect(url_for('showMenu', catagory_id=catagory_id))
+        return redirect(url_for('showMenu', element_id=element_id))
     else:
         return render_template('deleteSeriesItem.html', item=itemToDelete)
 
@@ -434,10 +434,10 @@ def disconnect():
         del login_session['user_id']
         del login_session['provider']
         flash("You have successfully been logged out.")
-        return redirect(url_for('showCatagories'))
+        return redirect(url_for('showElements'))
     else:
         flash("You were not logged in")
-        return redirect(url_for('showCatagories'))
+        return redirect(url_for('showElements'))
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True

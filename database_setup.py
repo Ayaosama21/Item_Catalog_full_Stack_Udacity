@@ -14,8 +14,8 @@ class USER(Base):
     picture = Column(string(250))           #to make a picture
 
 
-class Catagory(Base):
-    __tablename__ = 'catagory'
+class Element(Base):
+    __tablename__ = 'element'
 
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
@@ -31,15 +31,15 @@ class Catagory(Base):
            'id'           : self.id,
        }
  
-class CatagoryItem(Base):
-    __tablename__ = 'catagory_item'
+class ElementItem(Base):
+    __tablename__ = 'element_item'
 
 
     name =Column(String(80), nullable = False)
     id = Column(Integer, primary_key = True)
     description = Column(String(250))
-    catagory_id = Column(Integer, ForeignKey('catagory.id'))
-    catagory = relationship(Catagory)
+    element_id = Column(Integer, ForeignKey('element.id'))
+    element = relationship(Element)
     #price = Column(String(8))
     #course = Column(String(250))
     user_id = Column(Integer,ForeignKey('user.id'))
@@ -59,7 +59,7 @@ class CatagoryItem(Base):
 
 
 
-engine = create_engine('sqlite:///catagories.db')
+engine = create_engine('sqlite:///elements.db')
  
 
 Base.metadata.create_all(engine)
