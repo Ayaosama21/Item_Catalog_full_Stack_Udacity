@@ -3,18 +3,29 @@ develop an application that provides a list of items within a variety of categor
 
 #### steps:
 1.Launch the Vagrant VM by using command:
-    $ vagrant up
+                    
+        $ vagrant up
 
 2. log into using command:
-    $ vagrant ssh 
+    
+        $ vagrant ssh 
 
 3.  change directory into /vagrant then using ls:
-    $ cd /vagrant
     
-   
-    $ python data_base.py
-    $ python lotsofmenus.py
-    $ python application.py
-  open browser "http://localhost:5000"
+        $ cd /vagrant
+    
+4. write this command :
+
+        $ python database.py
+
+5.use this command:
+     
+        $ python lotsofmenus.py
+
+6. Run our application:
+
+        $ python application.py
+
+7. open browser "http://localhost:5000"
   
   
