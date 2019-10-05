@@ -8,7 +8,7 @@ from flask import (Flask,
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import desc
-from database_setup import Element, Base, ElementItem, User
+from database_setup import Element, Base, ElementItem, USER
 from flask import session as login_session
 import random
 from oauth2client.client import flow_from_clientsecrets

@@ -10,8 +10,8 @@ class USER(Base):
    
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
-    email = Column(string(250), nullable=False)         #to make an email to login or logout
-    picture = Column(string(250))           #to make a picture
+    email = Column(String(250), nullable=False)         #to make an email to login or logout
+    picture = Column(String(250))           #to make a picture
 
 
 class Element(Base):
