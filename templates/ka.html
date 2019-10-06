@@ -1,0 +1,25 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+	<div class="row top-menu">
+		<div class="col-md-10"></div>
+		<div class="col-md-2 text-right">
+					</div>
+	</div>
+	<div class="row divider blue">
+		<div class="col-md-12"></div>
+	</div>
+	<div class="row banner main">
+		<div class="col-md-1"></div>
+		<div class="col-md-11 padding-none">
+			<h1>Elements</h1>
+		</div>
+	</div>
+    <div class="menu-item">
+                   <h3> {{item.name}} </h3>
+				   <h3>{{item.description}} </h3>
+            <a href='{{url_for('editMenuItem', element_id=item.element_id, series_id=item.id ) }}'>Edit</a> | 
+            <a href='{{url_for('deleteMenuItem', element_id=item.element_id, series_id=item.id ) }}'>Delete</a>
+        </div>
+       
+{% endblock %}
